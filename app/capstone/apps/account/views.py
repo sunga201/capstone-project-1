@@ -105,7 +105,6 @@ class RegistrationAPI(generics.GenericAPIView):
                 return Response({'message': '잘못된 접근입니다.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
             else:  # 지원하는 소셜 로그인
-                print('hereffff.')
                 try:
                     User.objects.get(email=request.data['email']) # 기존 가입 유저중에 동일한 이메일을 사용하는 유저가 있을 경우 해당 계정과 연동
                     return Response(status=status.HTTP_409_CONFLICT)
