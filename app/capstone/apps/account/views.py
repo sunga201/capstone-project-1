@@ -61,6 +61,7 @@ def find_user(request):
 
 
 def sendMail(message, mail_title, to_email):
+    print("send mail!!!!!!!!!!!!")
     email = EmailMessage(mail_title, message, to=[to_email])
     email.send()
 

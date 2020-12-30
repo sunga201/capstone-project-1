@@ -59,7 +59,6 @@ services:
       - ./file/complete:/media/files/ #사용자가 업로한 파일들을 저장하는 장소
       - ./file/thumbnail:/media/thumbnail/
       - ./React:/React/
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf #nginx 테스트용입니다. 나중에 지워주세요.
     ports:
       - "80:80"
     depends_on:
