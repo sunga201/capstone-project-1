@@ -25,3 +25,6 @@ nginx/certbot
 # SSL 테스트용
 app/stunnel/*
 stunnel.*
+
+# Amazon EC2 접속용 키파일
+*.pem
