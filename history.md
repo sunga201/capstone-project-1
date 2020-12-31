@@ -688,5 +688,3 @@ API
 
 8. 회원 탈퇴
 ![회원 탈퇴](https://user-images.githubusercontent.com/49271247/79839467-8204da80-83ef-11ea-8607-150b67794d55.png)
-
-
