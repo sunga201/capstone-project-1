@@ -67,24 +67,24 @@ https://moongedrive.xyz 로 접속해주세요.
 <details>
 <summary>1. 구글 / 페이스북 로그인</summary>
 <div markdown="1">
-<img src="img/readme/구글 로그인.gif" height="500px" alt="googleLogin"></img><br/>
-<img src="img/readme/페이스북 로그인.gif" height="500px" alt="facebookLogin"></img><br/>
+<img src="img/readme/구글 로그인.gif" height="400px" alt="googleLogin"></img><br/>
+<img src="img/readme/페이스북 로그인.gif" height="400px" alt="facebookLogin"></img><br/>
 </div>
 </details>
 
 <details>
 <summary>2. 파일 업로드 / 다운로드</summary>
 <div markdown="1">
-<img src="img/readme/업로드.gif" height="500px" alt="upload"></img><br/>
-<img src="img/readme/다운로드.gif" height="500px" alt="download"></img><br/>
+<img src="img/readme/업로드.gif" height="400px" alt="upload"></img><br/>
+<img src="img/readme/다운로드.gif" height="400px" alt="download"></img><br/>
 </div>
 </details>
 
 <details>
 <summary>3. 이미지 / 동영상 미리보기</summary>
 <div markdown="1">
-<img src="img/readme/이미지 미리보기.png" height="400px" alt="image-priview"></img><br/>
-<img src="img/readme/동영상 스트리밍.gif" height="500px" alt="video-streaming"></img><br/>
+<img src="img/readme/이미지 미리보기.png" height="300px" alt="image-priview"></img><br/>
+<img src="img/readme/동영상 스트리밍.gif" height="400px" alt="video-streaming"></img><br/>
 </div>
 </details>
 
