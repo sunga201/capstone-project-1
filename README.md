@@ -4,14 +4,7 @@
 
 #### 웹 브라우저를 통해 누구나 간편하게 사용할 수 있는 웹 클라우드 저장소입니다. 
 <img src="img/readme/메인.png" height="500px" alt="login"></img><br/>
-<img src="img/readme/메인 2.png" height="500px" alt="main"></img><br/>  
-
-
-
-
-
-
-
+<img src="img/readme/메인 2.png" height="500px" alt="main"></img><br/>      
 
 
 사용 방법
