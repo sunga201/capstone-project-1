@@ -62,9 +62,8 @@ https://moongedrive.xyz 로 접속해주세요.
 
 > mod_zip (https://github.com/evanmiller/mod_zip) 
 
-  여러 개의 파일을 다운로드 받을 때, 웹 어플리케이션 서버의 부하를 줄여주기 위해 Nginx에서 대신 압축해서 사용자에게 전송해주는 기능을 수행합니다. 실제 적용은 nginx와 mod-zip이 적용되어 있는 docker 
-  이미지를 다운로드 받아 사용했습니다. (levelonestl/nginx-mod-zip : https://hub.docker.com/r/levelonestl/nginx-mod-zip) <br></br>
-  DRF에서 mod_zip을 사용하기 위해 django-zip-stream을 사용했습니다.(https://github.com/travcunn/django-zip-stream)
+  여러 개의 파일들을 동시에 다운로드 받을 때 파일들을 압축해서 사용자에게 제공해주는 Nginx의 라이브러리입니다. Nginx가 파일들의 압축을 대신 수행하여 WAS의 부하를 줄여주는 역할을 합니다. DRF에서 사용
+  하기 위해 python 라이브러리인 django-zip-stream과 함께 사용했습니다.(https://github.com/travcunn/django-zip-stream)
 
                                                       
 사용 예시
