@@ -47,7 +47,6 @@ class UploadContent extends Component {
     };
     this.myRef=React.createRef()
     this.props.setModalHeadText('업로드 경로 설정');
-    console.log("upload content, props : ", props);
   }
 
 
@@ -63,14 +62,12 @@ class UploadContent extends Component {
   }
 
   changePath=(path)=>{ //업로드 경로 변경
-    console.log('in upload, change path : ', path);
     this.setState({
       uploadDir: path
     })
   }
 
   componentDidMount=()=>{
-    console.log("did mount. flow : ", this.state.flow);
     if(!this.state.flow||this.state.flow.getSize()==this.state.flow.sizeUploaded()){
       this.state.flow=new Flow({
           target: function(file, url){
@@ -79,7 +76,6 @@ class UploadContent extends Component {
                 return;
               }
               else
-                console.log('success, file : ', file, ' url : ', file.targetUrl);
               return file.targetUrl;
           },
 
@@ -96,13 +92,11 @@ class UploadContent extends Component {
     if(!this.state.flow.support) console.log("flow.js 지원 안함.");
 
     this.state.flow.on('fileAdded', function(file){
-        console.log('uploadDir : ', this.state.uploadDir);
         let data= {
             fileSize: file.size,
             fileName: file.name,
             directory: this.state.uploadDir
         };
-        console.log("upload path : ", this.state.uploadDir);
         const formData  = new FormData();
         for(const name in data) {
             formData.append(name, data[name]);
@@ -111,7 +105,6 @@ class UploadContent extends Component {
 
         let errorCheck = response => {
             if(response.status==400){
-                console.log("this : ", this);
                 this.remove(file);
                 throw Error("디렉토리 내에 동일한 파일 이름이 존재합니다.");
             }
@@ -119,10 +112,8 @@ class UploadContent extends Component {
                 throw Error('저장 공간이 부족합니다.');
             }
             this.props.errorCheck(response);
-            console.log("promise 1, response : ", response);
             return response;
         };
-        console.log("파일 등록!");
         fetch(`${window.location.origin}/api/upload/flow`, {
             method: "POST",
             credentials: 'include',
@@ -130,31 +121,21 @@ class UploadContent extends Component {
         })
         .then(errorCheck)
         .then(response=>{ // 실제 서버에서 사용
-            console.log("promise 2, response : ", response);
             let url = response.headers.get('Location'); //배포용
-            console.log('url : ', url);
             file.targetUrl=url; //여기서 등록 안될때가 있다.
-            console.log('end!');
             return file;
         })
         .then(file=>{
           let isSetting=false;
           function check(file){
             if(file.targetUrl!=null&&file.targetUrl!=''){
-              console.log('check!, isSetting', isSetting);
               isSetting=true;
               clearInterval(wait);
             }
-            else{
-              console.log('here, error check!!, repeat.');
-            }
           }
           let wait=setInterval(function(){
-            console.log('file : ', file);
             check(file);
-            console.log('here, isSetting : ', isSetting);
             if(isSetting) file.resume();
-            else console.log('not setting!!!!!');
           }, 200);
           
         })
@@ -163,13 +144,7 @@ class UploadContent extends Component {
     }.bind(this));
 
     this.state.flow.on('filesSubmitted', function(array, event){
-      for(let i=0; i<array.length; i++){
-        console.log('file ', i, ' 추가 완료!, url : ', array[i].targetUrl, this.myRef);     
-        
-      }
-      console.log('파일 큐에 추가 완료!  ', this.state.flow.files, ' this : ', this);
       this.showProcess(array);
-      console.log(this.state.fileList);
     }.bind(this))
 
     this.state.flow.on('fileRetry', function(file, chunk){ //파일 재시도
@@ -177,9 +152,7 @@ class UploadContent extends Component {
     });
 
     this.state.flow.on('fileRemoved', function(file){ //파일이 업로드 큐에서 제거되었을 때 호출되는 이벤트
-      console.log('파일 ', file, ' 제거됨!');
       if(this.state.flow.files.length==0){
-          console.log("all file removed!", this.myRef);
           this.setState({
               isSubmitted: false
           })
@@ -194,7 +167,6 @@ class UploadContent extends Component {
         else if(file.name.length>20){
           string=<div>{file.name}<br />업로드 완료!</div>;
         }
-        console.log("string : ", string);
         this.props.notify(string);
     }.bind(this));
 
@@ -203,7 +175,6 @@ class UploadContent extends Component {
     });
     
     this.state.flow.on('fileProgress', function(file, chunk){
-      console.log(file.name, " 업로드중...", file.timeRemaining(), file.sizeUploaded())
       let array=this.state.fileList;
       for(let i=0; i<array.size; i++){
         if(file.uniqueIdentifier==array[i].uniqueIdentifier){
@@ -217,7 +188,6 @@ class UploadContent extends Component {
     }.bind(this))
 
     this.state.flow.on('complete', function(){
-      console.log("업로드 끝!, this : ", this);
       this.setState({
         isPathSet: false,
         isSubmitted: false
@@ -229,7 +199,6 @@ class UploadContent extends Component {
   }
 
   setUploadAreaEvent=()=>{
-    console.log("call!, isPathSet : ", this.state.isPathSet);
     if(this.state.isPathSet){
       this.state.flow.assignBrowse(this.myRef.current);
       this.state.flow.assignDrop(this.myRef.current);
@@ -237,7 +206,6 @@ class UploadContent extends Component {
   }
 
   stop=(file)=>{
-    console.log("pause call!, file : ", file);
     file.pause();
     this.setState({
         fileList: this.state.fileList
@@ -245,12 +213,10 @@ class UploadContent extends Component {
   }
 
   resume=(file)=>{
-    console.log("resume call!, file : ", file);
     file.resume();
   }
 
   remove=(file)=>{
-    console.log("remove call!, file : ", file, 'type : ', typeof(this.state.fileList), file.targetUrl);
     let list=this.state.fileList;
     const idx=this.state.fileList.findIndex((f)=>{return f.uniqueIdentifier==file.uniqueIdentifier})
     file.cancel();
@@ -261,7 +227,6 @@ class UploadContent extends Component {
     if(file.targetUrl){
       let id=file.targetUrl.split('/').reverse()[0];
       let url=`${window.location.origin}/api/partial/${id}`;
-      console.log("id : ", id);
 
       fetch(url, {
         method: "DELETE",
@@ -273,7 +238,6 @@ class UploadContent extends Component {
       .then(this.props.errorCheck)
       .then(()=>{
         this.props.notify(file.name+' 업로드를 중단했습니다.');
-        console.log("length : ", this.state.flow, this.state.flow.files, this.state.flow.files.length)
         if(this.state.flow.files.length==0){
           this.setState({
             isSubmitted: false
@@ -294,7 +258,6 @@ class UploadContent extends Component {
   }
 
   render() {
-    console.log("upload render start, isSharing : ", this.props.isSharing);
     let pathElements = this.props.curFolderPath.split('/');
     return (
       <Fragment>

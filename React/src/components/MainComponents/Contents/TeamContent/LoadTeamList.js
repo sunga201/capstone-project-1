@@ -8,7 +8,6 @@ const option = {
   };
 
 const loadTeamList = (setIsLoading, setTeamList, props, setDefaultCheckTeam=null, folderID=null) => {
-    console.log("load team list, setDefaultCheckTeam : ", setDefaultCheckTeam, ', folderID : ', folderID);
     const tempList1 = [];
     const tempList2 = [];
     setIsLoading(true);
@@ -31,7 +30,6 @@ const loadTeamList = (setIsLoading, setTeamList, props, setDefaultCheckTeam=null
               tempList2.push(team);
             });
             const tempList3 = tempList1.concat(tempList2);
-            console.log("teamList result : ", tempList3);
             tempList3.sort((a, b)=>{  // 팀 이름으로 오름차순 정렬
               return a.team_name>b.team_name;
             })
@@ -40,15 +38,12 @@ const loadTeamList = (setIsLoading, setTeamList, props, setDefaultCheckTeam=null
             if(setDefaultCheckTeam && folderID){
               for(let i in tempList3){
                 for(let j in tempList3[i].share_folders){
-                  console.log('id : ', tempList3[i].share_folders[j].pk, ', ', folderID);
                   if(tempList3[i].share_folders[j].pk==folderID){
-                    console.log("check!!!!");
                     defaultCheckTeam.push(Number(i));
                     break;
                   }
                 }
               }
-              console.log("check team result : ", defaultCheckTeam);
               setDefaultCheckTeam(defaultCheckTeam);
             }
             setIsLoading(false);

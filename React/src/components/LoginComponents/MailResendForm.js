@@ -3,7 +3,6 @@ import "./LoginStyle.css";
 import {Row, Col, Spinner} from 'reactstrap';
 import logo from './mail.png';
 const MailResendForm=({nickname, email, resendAuthEmail, isLoading, logout}) => {
-    console.log("MailResendForm called!!!");
     return(
         <div className="LS MailResend">
         <div className="wrapper fadeInDown">

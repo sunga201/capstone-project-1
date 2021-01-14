@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_delete, sender=Directory)
 def delete_directory(sender, instance, using, **kwargs):
-    print('delete directory!')
     with transaction.atomic():
         try:
             user_storage = (UserStorage.objects

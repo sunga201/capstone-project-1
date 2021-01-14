@@ -137,18 +137,14 @@ const SharingContent=(props)=>{
     const [showSearchResult, setShowSearchResult] = useState(false);
 
     useEffect(() => {
-        console.log("sharing start. : ", props);
-        console.log("share switch! props : ", props.switchSearchingRoot);
         loadTeamList(setTeamListLoading, setTeamList, props);
     },[])
 
     const loadSharingFolders=()=>{
-        console.log("cur team : ", curTeam);
         setIsLoading(true);
         axios.get(`${window.location.origin}/api/team-management/${curTeam._id}`,option)
         .then(content => {
             const newFolderList=[];
-            console.log("share folders : ", content.data.share_folders);
             for(let i in content.data.share_folders){
                 let folderElement=content.data.share_folders[i];
                 const folderInfo={
@@ -159,7 +155,6 @@ const SharingContent=(props)=>{
                 }
                 newFolderList.push(folderInfo);
             }
-            console.log("new folder list : ", newFolderList);
             setFolderList(newFolderList);
             setIsLoading(false);
         })
@@ -187,7 +182,6 @@ const SharingContent=(props)=>{
                 break;
             }
           }
-          console.log("share path : ", share_path);
           br_path=share_path;
         }
         const fileInfo = {
@@ -211,7 +205,6 @@ const SharingContent=(props)=>{
         type:"folder"
       })
       for(let i=0;i<folderNameList.length;i++){
-        console.log("br path folder info : ", folderInfoList[folderNameList[i]]);
         let br_path=folderInfoList[folderNameList[i]]['browser_path'];
         if(br_path&&props.searchRootDirName!=''){
           let share_path='';
@@ -224,7 +217,6 @@ const SharingContent=(props)=>{
                 break;
             }
           }
-          console.log("share path : ", share_path);
           br_path=share_path;
         }
         const folderInfo = {
@@ -241,7 +233,6 @@ const SharingContent=(props)=>{
 
     const loadFilesNFolders = (dirName='', dirID=curFolderID, browserPath='', 
                                isSearching=false, searchFileList=[], searchFolderList=[]) => {
-        console.log('dirName : ', dirName, ', dirID :  ', dirID);
         if(showSearchResult && !isSearching) setShowSearchResult(false);
                 
         if(dirName=='...'){
@@ -250,19 +241,15 @@ const SharingContent=(props)=>{
           for(let i=0; i<newPathArr.length-2; i++){
               newPath+=newPathArr[i]+'/';
           }
-          console.log("newPath : ", newPath);
           setCurFolderPath(newPath);
           if(newPath=='/'){ //공유폴더
-              console.log("to the sharing folder list!");
               setIsSharingInit(true);
               loadSharingFolders();
               return;
           }
       }
         if(dirID==''){//공유폴더 목록 출력
-            console.log("init, curFolderPath : ", curFolderPath);
             setIsSharingInit(true);
-            console.log("curteam sharefolder : ", curTeam.share_folders);
             loadSharingFolders();
         }
         
@@ -294,7 +281,6 @@ const SharingContent=(props)=>{
               .then(props.errorCheck)
               .then(content2 => { 
                   if(content2.hasOwnProperty('error')) throw Error(content2['error']);
-                  console.log("content2 : ", content2);
                   setFileNFolderInfo(
                                   dirID,
                                   props.rootDirID,
@@ -313,7 +299,6 @@ const SharingContent=(props)=>{
     };
     let sharingTeamChecked=[];
     const shareTeamOnCheck=(value)=>{
-        console.log("check!", value);
         sharingTeamChecked=value;
         submitShareTeam();
     }

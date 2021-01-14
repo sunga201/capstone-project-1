@@ -6,7 +6,6 @@ import logo from './login4.png';
 
 
 const ForgotPasswordForm = ({email, username, isLoading, changeEmail, changeUsername, sendPassword}) => {
-    console.log('fpForm : ', isLoading);
     return (
       <div className="LS Login">
         <div className="wrapper fadeInDown">

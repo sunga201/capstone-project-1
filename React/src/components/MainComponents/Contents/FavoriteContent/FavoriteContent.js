@@ -19,15 +19,10 @@ const FavoriteContent=(props)=>{
     const [isLoading, setIsLoading] = useState(false);
     const [isFavoriteInit, setIsFavoriteInit] = useState(true);
 
-    useEffect(() => {
-        console.log("Favorite start. : ", props);
-      },[])
-
     const loadFavoriteItems=()=>{
         setIsLoading(true);
         axios.get(`${window.location.origin}/api/favorite`,option)
             .then(content2 => {
-                console.log('content2 : ',JSON.stringify(content2.data))
               const newFileList=[], newFolderList=[];
               const fileNameList= Object.keys(content2.data.files)
               for(let i=0;i<fileNameList.length;i++) {
@@ -63,7 +58,6 @@ const FavoriteContent=(props)=>{
     }
     const loadFilesNFolders = (dirName, dirID=curFolderID) => {
         if(dirID=='' || dirID==props.rootDirID){//즐겨찾기 파일,폴더들 출력
-            console.log("init, curFolderPath : ", curFolderPath);
             setIsFavoriteInit(true);
             loadFavoriteItems();
            
@@ -72,16 +66,13 @@ const FavoriteContent=(props)=>{
             setIsFavoriteInit(false);
             if(dirName!=''&&dirName!='...') setCurFolderPath(curFolderPath+dirName+'/');
             if(dirName=='...'){ 
-                console.log('newPath curFolderpath : ', curFolderPath);
                 const newPathArr=curFolderPath.split('/');
                 let newPath='';
                 for(let i=0; i<newPathArr.length-2; i++){
                     newPath+=newPathArr[i]+'/';
                 }
-                console.log("newPath : ", newPath);
                 setCurFolderPath(newPath);
                 if(newPath==''){ 
-                    console.log("to the favorite folder!");
                     setCurFolderPath('');
                     setIsFavoriteInit(true);
                     loadFavoriteItems();
@@ -94,7 +85,6 @@ const FavoriteContent=(props)=>{
             setIsLoading(true);
             axios.get(`${window.location.origin}/api/directory/${dirID}`,option)
             .then(content2 => { 
-                console.log("content2 : ", content2);
                 const newFileList=[], newFolderList=[];
                 const fileNameList= Object.keys(content2.data.files)
                 for(let i=0;i<fileNameList.length;i++) {
@@ -120,7 +110,6 @@ const FavoriteContent=(props)=>{
                     type:"folder"
                 })
                 for(let i=0;i<folderNameList.length;i++){
-                    console.log("folderNameList[i] : ", content2.data.subdirectories[folderNameList[i]]);
                     const folderInfo = {
                         name: folderNameList[i],
                         pk:content2.data.subdirectories[folderNameList[i]].pk,

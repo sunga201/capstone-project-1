@@ -55,7 +55,7 @@ const MainFileBrowser = (props) => {
   const toggleShareModal =() => setShareModal(!shareModal);
   const toggleClearModal = () => setClearModal(!clearModal);
   const toggleRecoverModal = () => setRecoverModal(!recoverModal);
-  const [newPath, setNewPath] = useState(''); // 파일 이동 명령에 사옹할 경로, 공유폴더에 접근중일 경우 pk가 저장되며,
+  const [newPath, setNewPath] = useState(''); // 파일 이동 명령에 사용할 경로, 공유폴더에 접근중일 경우 pk가 저장되며,
                                               // 아닐 경우 경로명이 저장된다. 
   const [newFolderName, setNewFolderName] = useState('');
   const [isRename, toggleRename] = useState(false);
@@ -79,20 +79,16 @@ const MainFileBrowser = (props) => {
   };
 
   const valChange=(e)=>{
-    console.log("e : ", e.target);
     setNewFolderName(e.target.value);
   }
   const [currentItemInfo, setCurrentItemInfo] = useState({ //오른쪽 사이드바에 표시할 데이터
   });
   const [multiItemInfo, setMultiItemInfo] = useState({});
-  console.log('home, props : ', props, currentItemInfo);
   useEffect(() => {
-    console.log("in browser, is loading? : ", props.isLoading, props.fileList, props.folderList)
     if(!props.isSharingInit) props.loadFilesNFolders('', props.rootDirID); 
     else props.loadFilesNFolders('', ''); // 특정 팀에 설정되어 있는 공유폴더 목록 불러오기
   },[]);
 
-  console.log("isSharingInit : ", props.isSharingInit, ', showSearchResult : ', props.showSearchResult);
   const showFileInfo = (index) => {
     setCurrentItemInfo(props.fileList[index]);
   };
@@ -109,7 +105,6 @@ const MainFileBrowser = (props) => {
       .then(content => {
         content=content.data;
         if(content.hasOwnProperty['error']) throw Error(content['error'])
-        console.log("contetn : ", content);
         const folderInfo = {
         ...props.folderList[index],
         subfolderNum:Object.keys(content['subdirectories']).length,
@@ -123,18 +118,15 @@ const MainFileBrowser = (props) => {
   };
 
   const handleDownload=()=>{ // 오른쪽 클릭 -> 다운로드
-    console.log(currentItemInfo, multiItemInfo);
     let chk=false;
     let params='';
     if(multiItemInfo.length>1){
       for(let i in multiItemInfo){
         params+=multiItemInfo[i].pk + (i==multiItemInfo.length-1 ? '' : ' ');
         if(currentItemInfo.pk==multiItemInfo[i].pk){
-          console.log("multi, info : ", multiItemInfo);
           if(!chk) chk=true;
         }
       }
-      console.log("params : ", params);
     }
 
     if(chk) CustomDownload('', params); // 파일 여러 개 다운로드
@@ -145,7 +137,6 @@ const MainFileBrowser = (props) => {
   }
   
   const handleDelete=()=>{ //오른쪽 클릭 -> 삭제
-    console.log("delete start, cur : ", currentItemInfo);
     let chk=false;
     let params='';
     if(multiItemInfo.length>1){ //한번에 여러개 삭제
@@ -153,11 +144,9 @@ const MainFileBrowser = (props) => {
         if(multiItemInfo[i].type=='folder' && multiItemInfo[i].name=='...') continue;
         params+=multiItemInfo[i].pk + (i==multiItemInfo.length-1 ? '' : ' ');
         if(currentItemInfo.pk==multiItemInfo[i].pk){
-          console.log("multi, info : ", multiItemInfo);
           if(!chk) chk=true;
         }
       }
-      console.log("params : ", params);
     }
 
     if(chk) { //파일 및 폴더 여러 개 삭제
@@ -169,8 +158,6 @@ const MainFileBrowser = (props) => {
   }
 
   const handleFavorite = () => {
-
-    console.log('currentitem info pk'+currentItemInfo.pk);
       let data = {
         favorite:currentItemInfo.favorite ? false : true
     }
@@ -182,7 +169,6 @@ const MainFileBrowser = (props) => {
       if(res.response.status>=400) throw Error(res.response.data);
     })
     .then(content=> {
-      console.log('favoirte file !!!'+JSON.stringify(content.data));
       props.notify(currentItemInfo.favorite ? "즐겨찾기에서 삭제되었습니다." : "즐겨찾기에 추가되었습니다.");
       let newInfo=currentItemInfo;
       newInfo.favorite=!newInfo.favorite;
@@ -202,7 +188,6 @@ const clearTrash = () => {
     if(res.response.status>=400) throw Error(res.response.data);
   })
   .then(content => {
-    console.log(JSON.stringify(content))
     toggleClearModal();
     props.notify('휴지통을 성공적으로 비웠습니다.');
     props.checkUserState();
@@ -210,7 +195,6 @@ const clearTrash = () => {
   })
 }
 const itemRecover = () => {
-  console.log("item info : ", currentItemInfo, multiItemInfo);
   if(multiItemInfo.length>1) {
     if(multiItemInfo[0].itemType == "file") {
       let data = [];
@@ -223,7 +207,6 @@ const itemRecover = () => {
         if(res.response.status>=400) throw Error(res.response.data);
       })
       .then(content=> {
-        console.log('multi recover test',JSON.stringify(content));
         props.notify('복구 완료.');
         props.loadFilesNFolders();
       })
@@ -241,7 +224,6 @@ const itemRecover = () => {
         })
         .then(content=> {
           props.loadFilesNFolders();
-          console.log('multi recover data : ',JSON.stringify(data));
           props.loadFilesNFolders();
         })
       })
@@ -254,14 +236,10 @@ const itemRecover = () => {
     ]
     axios.post(`${window.location.origin}/api/recover`,JSON.stringify(data),option)
     .catch(res=>{
-      console.log('recover data : ',JSON.stringify(data));
-      console.log("response data : ", res, res.response);
       props.errorCheck(res.response, res.response.data);
-      console.log("response data 2 : ", res, res.response);
       if(res.response.status>=400) throw Error(res.response.data['error']);
     })
     .then(content => {
-      console.log('recover test : ',JSON.stringify(content));
       props.notify('복구 완료.');
       props.loadFilesNFolders();
     })
@@ -276,28 +254,22 @@ const handleRecover = () => {
 
   const handleRename=()=>{ //오른쪽 클릭 -> 이름 바꾸기
     setNewName(currentItemInfo.name);
-    console.log("cur data : ", currentItemInfo);
     toggleRename(true);
   }
 
   const onChangeNewName=(e)=>{
-    console.log("target : ", e.target.value);
     setNewName(e.target.value);
   }
 
   const handleMove=()=>{//오른쪽 클릭 -> 이동
-    console.log("move!");
     toggleMoveModal();
   }
 
   const submitReplace=()=>{
-    console.log("submit, path : ", newPath);
-    console.log('file info : ', multiItemInfo, currentItemInfo);
     let data={
       parent: newPath
     };
     if(multiItemInfo.length>1){ //여러 개 한번에 옮기기
-      console.log("multi Check!, ", multiItemInfo[0].itemType);
       if(multiItemInfo[0].itemType=='file'){
         data['type']='file';
       }
@@ -310,7 +282,6 @@ const handleRecover = () => {
       }
     }
     else{ //한개씩 옮기기
-      console.log("single check!");
       if(currentItemInfo.type=='file'){
         data['type']='file';
       }
@@ -326,9 +297,7 @@ const handleRecover = () => {
     })
     .then(content=>{
       content=content.data;
-      console.log('content : ', content.data);
       if(content.hasOwnProperty('error')){
-        console.log("here err!!!!!");
         throw Error(content['error']);
       }
       props.notify('경로 이동 완료!');
@@ -348,7 +317,6 @@ const handleRecover = () => {
   const multiFileCheck=(e)=>{
     toggleRename(false);
     if(e.length>=1){ // 폴더 그룹 클릭했다가 파일 그룸 클릭할 때, 폴더 그룹 선택 해제
-      console.log('props : ', e['0'], myFileGroupRef);
       if(e['0'].props.itemType=='file') myFolderGroupRef.current.clearSelection();
       else if(myFileGroupRef.current) myFileGroupRef.current.clearSelection(); //처음 공유폴더목록을 보여줄 때 
                                                                                //파일 목록이 나타나지 않기 때문에
@@ -367,18 +335,11 @@ const handleRecover = () => {
   }
 
   const check=(flow)=>{
-    console.log("check!");
     setFlow(flow);
-    if(flow) console.log('isLoading ? ', flow.files, flow.isUploading());
-    if(flow&&flow.isUploading()){
-      console.log("here, check called!!!");
-      //props.showRemainingTime(flow); 업로드 남은 시간 표기 테스트
-    }
   }
 
   const submitNewName=(target)=>{
     if(target.charCode==13){
-      console.log("multi item : ", multiItemInfo);
       if(newName==currentItemInfo.name){ //이름이 안바뀐 경우
         toggleRename(false);
         return; 
@@ -393,7 +354,6 @@ const handleRecover = () => {
         url+='directory/' + currentItemInfo.pk;
       }
 
-      console.log("url : ", url);
       let data={
         'name' : newName
       }
@@ -403,7 +363,6 @@ const handleRecover = () => {
         if(res.response.status>=400) throw Error(res.response.data);
       })
       .then(response=>{
-        console.log("new name res : ", response);
         let index=multiItemInfo['0'].index;
         if(currentItemInfo.type=='file'){
           props.fileList[index].name=newName;
@@ -418,14 +377,12 @@ const handleRecover = () => {
         props.notify("이름 변경 완료!");
       })
       .catch(e=>{
-          console.log("catched, e : ", e);
           props.notify(e);
       })
     }
   }
 
   const handleShare=()=>{//폴더에 오른쪽 클릭 -> 공유 설정
-    //console.log("handle share!", currentItemInfo.pk);
     loadTeamList(setIsTeamLoading, setTeamList, props, setDefaultCheckTeam, currentItemInfo.pk);
     toggleShareModal(!shareModal);
   }
@@ -439,11 +396,9 @@ const handleRecover = () => {
     let newTeam=shareTeamChecked.filter(x=>!defaultCheckTeam.includes(x))
     let newData={}, deleteData={};
     for(let i in newTeam){
-      console.log("team info : ", teamList[newTeam[i]]);
       newData['team'+(Number(i)+1)]=teamList[newTeam[i]]._id;
     }
     for(let i in deleteTeam){
-      console.log("team info : ", teamList[deleteTeam[i]]);
       deleteData['team'+(Number(i)+1)]=teamList[deleteTeam[i]]._id;
     }
     let url=`${window.location.origin}/api/sharing/${currentItemInfo.pk}`;
@@ -476,7 +431,6 @@ const handleRecover = () => {
   }
 
   const createDir=()=>{ //홈 화면에서 폴더 생성
-    console.log("createDir called!");
     if(newFolderName=='...'){
       props.notify("error : ...은 폴더 이름으로 할 수 없습니다.");
       return;
@@ -488,13 +442,10 @@ const handleRecover = () => {
     }
     axios.post(url, data, option)
     .catch(error=>{
-      console.log("error : ", error);
       if(error.response.status==400) throw Error('이미 동일한 이름의 폴더가 존재합니다.');
       props.errorCheck(error.response);
-      console.log("err check complete!");
     })
     .then(content=>{
-        console.log("content : ", content);
         props.notify('폴더 생성 완료!');
         toggleMkdirModal();
         setNewFolderName('');
@@ -510,7 +461,6 @@ const handleRecover = () => {
   }
 
   const changeSearchKeyword=(e)=>{
-    console.log('target : ', e.target, e.target.id, e.target.value);
     setSearchKeyword(e.target.value);
   }
 
@@ -525,7 +475,6 @@ const handleRecover = () => {
       props.notify('검색어는 두 글자 이상으로 입력해주세요.');
       return;
     }
-    console.log("submit! val : ", props.searchRootDirID, searchKeyword);
     let url=`${window.location.origin}/api/search/${props.searchRootDirID}/${searchKeyword}`;
     setIsSearching(true);
 
@@ -536,7 +485,6 @@ const handleRecover = () => {
     .then(content=>{
         content=content.data;
         if(content.hasOwnProperty('error')) throw Error(content['error']);
-        console.log("content : ", content);
         setIsSearching(false);
         props.setShowSearchResult(true);
         setSearchKeyword('');

@@ -21,12 +21,10 @@ export default class UploadFileBrowser extends Component{
       ],
       isCheck: [] //폴더 정보를 체크했으면, 해당 폴더의 id를 이 배열에 추가하여 다시 정보를 로드하지 않도록 한다.
     };
-    console.log("browser state : ", this.props, this.state);
   }  
 
   getDirectoryInfo(key, folderID){
     if(!this.state.isCheck.includes(folderID)){ //폴더 정보 불러온 적이 없을 경우
-      console.log("info get, key : ", key, ", folder ID : ", folderID);
       let url=`${window.location.origin}/api/directory/${folderID}`;
 
       fetch(url, {
@@ -39,7 +37,6 @@ export default class UploadFileBrowser extends Component{
       .then(this.props.errorCheck)
       .then(res=>res.json())
       .then(content=>{
-        console.log("initial data load complete! data : ", content, content.files, typeof(content.files));
         let files=content.files; //루트 디렉토리에 들어있는 파일 목록
         let subdirectories=content.subdirectories;
         for(let file in files){
@@ -63,7 +60,6 @@ export default class UploadFileBrowser extends Component{
         }
 
         for(let directory in subdirectories){
-          console.log('directory key : ', directory, ', data : ', subdirectories[directory]);
           this.setState(state => {
             state.files = state.files.concat([{
               key: key + directory + '/',
@@ -118,12 +114,10 @@ export default class UploadFileBrowser extends Component{
   }
 
   handleCreateFolder = (key) => { //디렉토리 만들기 기능
-    console.log('currentFolderID : ', this.state.currentFolderID);
     if(this.state.currentFolderID==''){
       this.state.notify('최상위 폴더 아래에만 폴더 생성이 가능합니다.');
       return;
     }
-    console.log("key : ", key);
     if(key.substr(0, this.props.rootKey.length-1)!==this.props.rootKey.substr(0, this.props.rootKey.length-1)){ //최상위 폴더가 루트 디렉터리가 아닌 경우
       key=this.props.rootKey + key;
     }
@@ -132,7 +126,6 @@ export default class UploadFileBrowser extends Component{
       return;
     }
 
-    console.log("here!!!, key : ", key);
     let url=`${window.location.origin}/api/mkdir`;
     let folders=key.split('/'); //폴더명에 특문 못쓰게 해야함.
     let name=folders[folders.length-2], parent="/";
@@ -141,7 +134,6 @@ export default class UploadFileBrowser extends Component{
     }
     else{
       for(let i=1; i<folders.length-2; i++){ //만든 폴더 전(부모 디렉토리)까지 경로 생성
-        console.log("i : ", i, ', folder : ', folders[i]);
         parent+=folders[i]+'/';
       }
     }
@@ -149,7 +141,6 @@ export default class UploadFileBrowser extends Component{
       "parent" : parent,
       'name' : name
     }
-    console.log("parent : ", parent, ', name : ', name);
     fetch(url, {
       method: "POST",
       headers: {
@@ -165,7 +156,6 @@ export default class UploadFileBrowser extends Component{
           currentPath:parent+name+'/'
         }, ()=>this.props.changePath(this.state.currentPath));
         
-        console.log("create complete!, content : ", content);
         let urlPart=content.headers.get('Location').split('/'); //배포용
         //let urlPart=content['Location'].split('/'); //개발용
         let id=urlPart[urlPart.length-1];
@@ -196,7 +186,6 @@ export default class UploadFileBrowser extends Component{
       name: names[names.length-2]
     }
 
-    console.log('oldkey : ', oldKey, "newKey : ",names[names.length-2]);  
     for(let i in this.state.files){
       if(this.state.files[i].key===oldKey){
         url=`${window.location.origin}/api/directory/${this.state.files[i].id}`;
@@ -236,23 +225,19 @@ export default class UploadFileBrowser extends Component{
   }
 
   handleDeleteFolder = (folderKey) => { //폴더 삭제
-    console.log("folderKey : ", folderKey);
     if(folderKey.length==0){
       return;
     }
 
     let newFiles = []
     for(let i in folderKey){
-      console.log("delete folder key : ", folderKey[i]);
       if(folderKey[i]===this.props.rootKey){
         this.state.notify('루트 디렉터리는 삭제할 수 없습니다.');
         return;
       }
-      console.log("folderKey : ", folderKey, folderKey.length);
       let url=`${window.location.origin}/api/directory/`;
       this.state.files.map((file) => {
         if(file.key === folderKey[i]){
-          console.log("matching here, key : ", file.key);
           url+=file.id;
         }
       })
@@ -260,7 +245,6 @@ export default class UploadFileBrowser extends Component{
       this.deleteFileOrDirectory(url);
     }
 
-    //console.log("final new files : ", newFiles);
     for(let i in folderKey){
       this.setState(state => {
         state.files = state.files.filter(file=>file.key.substr(0, folderKey[i].length) !== folderKey[i]);
@@ -270,7 +254,6 @@ export default class UploadFileBrowser extends Component{
   }
 
   handleDeleteFile = (fileKey) => { //파일 삭제
-    console.log("delete file!, key : ", fileKey, 'state key : ', this.state.files);
     if(fileKey.length==0){
       return;
     }
@@ -279,7 +262,6 @@ export default class UploadFileBrowser extends Component{
       let url=`${window.location.origin}/api/file/`;
       this.state.files.map((file) => {
         if(file.key === fileKey[i]){
-          console.log("matching here, key : ", file.key);
           url+=file.id;
         }
       })
@@ -287,21 +269,9 @@ export default class UploadFileBrowser extends Component{
       this.deleteFileOrDirectory(url);
     }
 
-    /*this.state.files.map((file) => {
-      if (!fileKey.includes(file.key)) {
-        newFiles.push(file);
-      }
-    })
-
-    this.setState(state => {
-      state.files = newFiles
-      return state
-    });*/
-
     for(let i in fileKey){
       this.setState(state => {
         state.files = state.files.filter(file=>file.key !== fileKey[i]);
-        console.log("into file setState, files : ", state.files);
         return state
       });
     }
@@ -312,7 +282,6 @@ export default class UploadFileBrowser extends Component{
     let path='';
     if(this.props.isSharing) path=e['key'];
     else path=e['key'].substr(4);
-    console.log("current path : ", path);
     if(this.props.isSharing) this.props.changePath(e['id']);
     else this.props.changePath(path); //현재 클릭중인 디렉토리에 맞춰서 업로드 경로 변경
     this.setState({
@@ -322,7 +291,6 @@ export default class UploadFileBrowser extends Component{
   }
 
   handleOnFolderOpen=(e)=>{ //폴더 열릴 때, 서버에서 해당 폴더의 정보 받아오기
-    console.log("folder open!!, e : ", e, e.id);
     this.getDirectoryInfo(e.key, e.id);
   }
 
@@ -331,7 +299,6 @@ export default class UploadFileBrowser extends Component{
   }
 
   myDeletionRenderer=(e)=>{
-    console.log("on delete, e : ", e);
     return(
       <Fragment>
         <h6>{e.children[1]}</h6>
@@ -341,7 +308,6 @@ export default class UploadFileBrowser extends Component{
   }
   
   myMultipleDeletionRenderer=(e)=>{
-    console.log("on multi delete, e : ", e);
     return(
       <Fragment>
         <Button outline color='danger ' onClick={e.handleDeleteSubmit} className='delete-button'>삭제</Button>

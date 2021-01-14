@@ -29,8 +29,7 @@ import streamSaver from 'streamsaver';
 const CustomDownload=(fileName, fileID, notify, loadFilesNFolders)=>{
     let fileStream=null;
 
-    let errorCheck = response =>{
-      console.log("response : ", response);
+    let downloadErrorCheck = response =>{
       if(!response.ok){
         loadFilesNFolders();
         throw Error('파일이 존재하지 않습니다.');
@@ -54,16 +53,13 @@ const CustomDownload=(fileName, fileID, notify, loadFilesNFolders)=>{
       credentials: 'include'
 
     })
-    .then(errorCheck)
+    .then(downloadErrorCheck)
     .then(content=>{
-      console.log("download, content : ", content, content.body);
       if(idSplit.length>1){ // 파일 여러 개, 압축 파일 이름 downloadFiles.zip으로 통일
         fileStream=streamSaver.createWriteStream('downloadFiles.zip');
       }
 
       else{
-        console.log("here.");
-        console.log("content : ", content);
         fileStream=streamSaver.createWriteStream(fileName); // filename_here에 파일의 실제 이름을 넣는다. 
                                                                    // 특정 디렉토리에 들어갈 때 파일의 이름 및 썸네일 정보를 가져오므로
                                                                    // 거기에서 이름을 가져오면 됨.
@@ -71,8 +67,7 @@ const CustomDownload=(fileName, fileID, notify, loadFilesNFolders)=>{
 
       const readableStream=content.body;
       if(window.WritableStream && readableStream.pipeTo){
-        return readableStream.pipeTo(fileStream)
-          .then(()=>console.log("finish writing."));
+        return readableStream.pipeTo(fileStream);
       }
     
       const writer=fileStream.getWriter()

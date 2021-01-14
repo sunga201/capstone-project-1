@@ -417,7 +417,6 @@ class CreateDirectoryView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        print("request : ", request.data)
         fields = {}
         for field in ('parent', 'name'):
             try:
@@ -440,7 +439,6 @@ class CreateDirectoryView(APIView):
                 {"message": "Parent directory does not exist"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        print("parent dir : ", parent)
         try:
             with transaction.atomic():
                 storage = (
@@ -754,7 +752,6 @@ class RecoverView(APIView):
     permission_classes = (IsAuthenticated,)
     
     def post(self, request):
-        print("request data : ", request.data)
         if not isinstance(request.data, list) or len(request.data) == 0:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -762,7 +759,6 @@ class RecoverView(APIView):
         errors = []
 
         for req in request.data:
-            print("req : ", req)
             if isinstance(req, str):
                 pk = req
                 parent = None
@@ -778,7 +774,7 @@ class RecoverView(APIView):
             except RecycleEntry.DoesNotExist:
                 errors.append(req)
                 continue
-            print('recycle_entry : ', recycle_entry.entry, recycle_entry.former_parent)
+
             if parent is None:
                 parent = recycle_entry.former_parent
                 if parent is None or not perm_check_dir_with_teams(request.user, parent):
@@ -793,9 +789,7 @@ class RecoverView(APIView):
                     errors.append({"request": req, "message": "Parent directory is inaccessible"})
                     continue
             entry = recycle_entry.entry
-            print("entry : ", entry)
             entry.parent = parent
-            print('entry.parent : ', entry.parent)
             #recycle_entry.entry=None # post_delete 시그널에 의해 entry 삭제되는 현상 방지
 
             try:
@@ -807,21 +801,17 @@ class RecoverView(APIView):
                         entry.in_recycle = False
                         entry.save()
                 except IntegrityError: #복구하려는 폴더에 동일한 이름의 파일이 존재하는 경우
-                    print("here, integrity error.")
                     transaction.rollback()
                     return Response({'error' : '해당 폴더에 이미 동일한 이름의 폴더가 존재합니다.'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 # Again. Celery may be better.
                 def recover_from_recycle(directory):
                     def recover_from_recycle_recur(directory):
-                        print("directory : ", directory, directory.parent)
                         directory.in_recycle = False
                         directory.save()
                         for child in directory.children.all().select_for_update():
-                            print("child : ", child)
                             try:
                                 child_dir = child.directory
-                                print("child_dir : ", child_dir)
                             except Directory.DoesNotExist:
                                 pass
                             else:
@@ -882,7 +872,6 @@ class ThumbnailAPI(APIView):
         )
 
 def file_download(data, user):
-    print("file download method.")
     if len(data) == 1:  # 파일 1개
         try:
             file_record = get_object_or_404(File, pk=data[0])
@@ -895,15 +884,11 @@ def file_download(data, user):
             )
         response = Response()
         # 서버에 저장되어 있는 파일 경로를 Nginx에게 알려준다.
-        print("download url : ", '/media/files/{0}/{1}'.format(
-            str(file_record.owner.pk), str(file_record.pk)))
-
         response['X-Accel-Redirect'] = '/media/files/{0}/{1}'.format(
             str(file_record.owner.pk), str(file_record.pk)
         )
         return response
     else:  # 파일 여러개
-        print("multi files.")
         files = []
         for file_id in data:
             try:
@@ -921,7 +906,6 @@ def file_download(data, user):
                 file_record.size
             ))
 
-        print('files : ', files)
         return TransferZipResponse(filename='downloadFiles.zip', files=files)
 
 class FileDownloadAPI(APIView): #파일 다운로드용 API
@@ -1041,7 +1025,6 @@ class FileManagementAPI(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 def multi_delete(entryList, user):
-    print("multi delete!")
     for entryID in entryList:
         try:
             with transaction.atomic():
@@ -1086,7 +1069,6 @@ class FileListAPI(generics.GenericAPIView):
 
     def get(self, request):
         self.queryset = File.objects.filter(owner=request.user)
-        print(self.queryset)
         serializer = self.serializer_class(self.queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -1102,7 +1084,6 @@ class PartialAPI(generics.GenericAPIView): # 테스트용, 삭제 안된 partial
 
     def get(self, request):
         self.queryset=PartialUpload.objects.filter(owner=request.user)
-        print(self.queryset)
         serializer=self.serializer_class(self.queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -1116,7 +1097,6 @@ class PartialDeleteAPI(APIView): # 특정 partial file 제거, 업로드 중단�
 
     def delete(self, request, pk):
         partial=get_object_or_404(PartialUpload, pk=pk)
-        print("owner : ", partial.owner, ' user : ', request.user)
         if partial.owner!=request.user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
@@ -1130,7 +1110,6 @@ class EntryReplacementAPI(APIView):
     def put(self, request):
         if request.data['type']=='file' or request.data['type']=='directory':
             if(request.data['parent'].startswith('/')):
-                print('here!!!!!')
                 n, parent = Directory.get_by_path_or_id(
                     request.user, request.data['parent'], match_user_on_id=False
                 )
@@ -1216,7 +1195,6 @@ class ItemSearchAPI(APIView):
                     if keyword in child_dir.name:
                         dir_data={}
                         browser_path=child_dir.get_browser_path()
-                        print("browser path : ", browser_path)
                         if browser_path==False:
                             return Response({'error' : '서버 에러 발생!'}, status=status.HTTP_400_BAD_REQUEST)
                         dir_data['browser_path']=browser_path
@@ -1230,7 +1208,6 @@ class ItemSearchAPI(APIView):
                 try:
                     child_file = child.file
                     if keyword in child_file.name:
-                        print("catch! name : ", child_file.name)
                         file_data = FileSerializer(child_file).data
                         file_data['favorite'] = child_file.favorite_of.filter(pk=request.user.pk).exists()
                         browser_path=child_file.get_browser_path()

@@ -5,7 +5,6 @@ import axios from 'axios';
 export default class ForgotPassword extends Component{
     constructor(props){
         super(props);
-        console.log('this test.');
         this.state = {
             username : "",
             email : ""
@@ -23,7 +22,6 @@ export default class ForgotPassword extends Component{
     
     sendPassword(e) {
         e.preventDefault();
-        console.log("password send!");
         let emailData={
             IDorPassword:'password',
             username:this.state.username,
@@ -42,7 +40,6 @@ export default class ForgotPassword extends Component{
         })
         .then(res=>res.json())
         .then(content => {
-            console.log(content);
             if(content.hasOwnProperty('error'))
                 throw Error('이메일 또는 닉네임이 올바르지 않습니다.');
             else{
@@ -67,8 +64,6 @@ export default class ForgotPassword extends Component{
  
 
     render(){
-        console.log("forgot password test.");
-
         return(      
             <div>
                 <ForgotPasswordForm

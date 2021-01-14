@@ -9,12 +9,9 @@ class DisplayID extends Component{
             username: this.props.history.location.state.username,
             email : this.props.history.location.state.useremail
         };
-        console.log(this.state);
     }
 
     render(){
-        console.log(" test.");
-
         return(
             <div>
             {this.state.username!="" && this.state.email!=""&&

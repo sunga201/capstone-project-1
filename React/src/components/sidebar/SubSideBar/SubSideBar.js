@@ -8,7 +8,6 @@ import "./SubSideBar.css";
 
 const SubSideBar = (props) => {
   const {uploadDate,size,name,pk,thumbnailUrl,type,subfolderNum,fileNum, owner, browserPath, favorite} = props;
-  console.log("owner : ", owner, ', favorite : ', favorite);
   const [update,setUpdate]=useState({});
   let sizeText="";
 
