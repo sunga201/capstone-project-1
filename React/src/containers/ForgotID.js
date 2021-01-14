@@ -4,7 +4,6 @@ import ForgotIDForm from "../components/LoginComponents/ForgotIDForm";
 export default class ForgotID extends Component{
     constructor(props){
         super(props);
-        console.log('this test.');
         this.state = {
             email : ""
         };
@@ -20,7 +19,6 @@ export default class ForgotID extends Component{
 
     
     sendID(e) {
-        console.log("sendID start.");
         e.preventDefault();
     
         let emailData={
@@ -38,7 +36,6 @@ export default class ForgotID extends Component{
         })
         .then(res=>res.json())
         .then(content => {
-            console.log(content);
             if(content.hasOwnProperty('error'))
                 throw Error(content['error']);
             else
@@ -59,8 +56,6 @@ export default class ForgotID extends Component{
  
 
     render(){
-        console.log("forgot id test.");
-
         return(      
             <div>
                 <ForgotIDForm

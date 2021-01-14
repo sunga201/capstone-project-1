@@ -13,10 +13,10 @@
     <script src="https://apis.google.com/js/platform.js?onload=gapiLoad" defer></script>
           <script type="text/javascript">
             function gapiLoad() {
-              console.log("gapi 로딩중..");
+              console.log("gapi loading..");
                 gapi.load('auth2', () => {
                     gapi.auth2.init().then(() => {
-                        console.log("gapi 로딩 완료.");
+                        console.log("gapi loading complete.");
                     });
                 });
             }

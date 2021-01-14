@@ -16,7 +16,6 @@ export default {
   },
 
   uploadTimeRemaining(msg, remainingTime){
-    console.log("time remaining message : ", msg);
     return toast.info({
       render:()=>
         <div>

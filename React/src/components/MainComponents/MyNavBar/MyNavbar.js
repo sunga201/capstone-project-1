@@ -31,7 +31,6 @@ import axios from "axios";
 const MyNavbar = ({ logout, profile, username, nickname, invitationList, invitationNameList,
                     leaderList, leaderNickList, checkUserState, notify, errorCheck, searchKeyword,
                     changeSearchKeyword, submitSearchKeyword, isShowingSearchBar}) => {
-  console.log("렌더링 시작! serachkeyword : ", searchKeyword, 'change : ', changeSearchKeyword, 'submit : ', submitSearchKeyword);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [update, setUpdate] = useState();
 
@@ -48,10 +47,8 @@ const MyNavbar = ({ logout, profile, username, nickname, invitationList, invitat
 
   //팀 초대 수락
   const acceptTeam = (e) => {
-    console.log("target : ", e.target);
     const currentTeamId = invitationList[e.target.value];
 
-    console.log("currentTeamId" + currentTeamId);
     axios
       .put(
         `${window.location.origin}/api/team/${currentTeamId}/acceptance`,
@@ -152,7 +149,6 @@ const MyNavbar = ({ logout, profile, username, nickname, invitationList, invitat
                   }
                   
                   {invitationNameList.map((team, index) => {
-                    console.log("team : ", team, ', index : ', index);
                     return (
                       <div className="invitation-pop-item" key={index}>
                         <div className="invitation-pop-text">

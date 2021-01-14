@@ -19,8 +19,6 @@ const HomeContent=(props)=>{
     const [isLoading, setIsLoading] = useState(true);
     const [showSearchResult, setShowSearchResult] = useState(false);
     useEffect(() => {
-      console.log("homeContent start! props : ", props);
-
       if(showSearchResult){
         loadFilesNFolders('', props.searchRootDirID);
       }
@@ -30,7 +28,6 @@ const HomeContent=(props)=>{
     }, []); 
 
     const setFileNFolderInfo=(dirID, rootDirID, fileInfoList, folderInfoList, parent)=>{
-      console.log("fileInfoList : ", fileInfoList, ', folderInfoList : ', folderInfoList);
       const newFileList=[], newFolderList=[];
       const fileNameList= Object.keys(fileInfoList)
       for(let i=0;i<fileNameList.length;i++) {
@@ -50,7 +47,6 @@ const HomeContent=(props)=>{
       }
       setFileList(newFileList);
     
-      console.log('content2 dir : ', folderInfoList);
       const folderNameList= Object.keys(folderInfoList) // root 하위 폴더불러오기->어차피 root폴더 접근해야해서 파일불러오기와 병행
       if(dirID!=rootDirID) newFolderList.push({
         name: '...',
@@ -58,7 +54,6 @@ const HomeContent=(props)=>{
         type:"folder"
       })
       for(let i=0;i<folderNameList.length;i++){
-        console.log("isFavorite ? ", folderInfoList[folderNameList[i]]['favorite'])
         const folderInfo = {
           name: (dirID=='' ? folderInfoList[folderNameList[i]]['name'] : folderNameList[i]),
           pk:(dirID=='' ? folderNameList[i] : folderInfoList[folderNameList[i]]['pk']),
@@ -68,16 +63,14 @@ const HomeContent=(props)=>{
         }
         newFolderList.push(folderInfo)
       }
-      console.log("new folder list : ", newFolderList);
       setFolderList(newFolderList);
     }
 
     const loadFilesNFolders = (dirName='', dirID=curFolderID, browserPath='', 
                                isSearching=false, searchFileList=[], searchFolderList=[]) => {
         if(showSearchResult && !isSearching) setShowSearchResult(false);
-        console.log("dir ID : ", dirID);
         props.switchSearchingRoot(dirID, dirName); //검색 범위 변경
-        console.log('isSearching ? ', isSearching);
+
         ///////////////////////////////
         // dirName : 접근하는 폴더 이름
         // dirID : 접근하는 디렉토리의 ID, 기본값 현재 폴더 ID
@@ -86,6 +79,7 @@ const HomeContent=(props)=>{
         // searchFileList : 겸색 결과 파일 모음
         // searchFolderList : 검색 결과 폴더 모음
         ///////////////////////////////
+
         if(dirName!=''&&dirName!='...'){
           if(browserPath=='')
             setCurFolderPath(curFolderPath+dirName+'/');
@@ -98,7 +92,6 @@ const HomeContent=(props)=>{
           for(let i=0; i<newPathArr.length-2; i++){
             newPath+=newPathArr[i]+'/';
           }
-          console.log("newPath : ", newPath);
           setCurFolderPath(newPath);
         }
         setCurFolderID(dirID);

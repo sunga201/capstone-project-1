@@ -32,17 +32,14 @@ class DirectoryEntry(models.Model):
     )
 
     def get_browser_path(self):
-        print('here!')
         path=''
         parent_dir_id=self.parent.pk
-        print('parent dir id : ', parent_dir_id)
         while parent_dir_id is not None:
             try:
                 parent_dir=Directory.objects.get(pk=parent_dir_id)
             except:
                 return False
             path=parent_dir.name + '/' + path
-            print("in browser path, path : ", path)
             if parent_dir.parent is None: break
             parent_dir_id=parent_dir.parent.pk
 
@@ -151,12 +148,6 @@ class File(DirectoryEntry):
     def path(self):
         '''The path this file is saved to in the server filesystem.'''
         if os.path.dirname(os.getcwd()) != '/':  # on develop.
-            print(str(os.path.dirname(os.getcwd())))
-            print("for develop!, path : ", Path(
-                str(os.path.dirname(os.getcwd())) + settings.COMPLETE_UPLOAD_PATH,
-                str(self.owner.pk),
-                str(self.pk)
-            ))
             return Path(
                 str(os.path.dirname(os.getcwd())) + settings.COMPLETE_UPLOAD_PATH,
                 str(self.owner.pk),

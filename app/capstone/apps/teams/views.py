@@ -21,31 +21,23 @@ class CreateTeamAPI(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request): #팀 생성
-        print("create team, req data : ", request.data)
         serializer_class=self.get_serializer_class()
         request.POST._mutable=True
         User=get_user_model()
-        print('request data : ', request.data)
         try:
             leader=get_object_or_404(User, username=request.data['team_leader'])
-            print('leader : ', leader)
         except(Http404):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         request.data['team_leader']=leader
-        print("cr : ", request)
         serializer=serializer_class(data=request.data)
-        print("serializer : ", serializer)
         if serializer.is_valid():
-            print('here.')
             try:
                 serializer.save()
                 return Response({'message' : '팀 생성 완료'}, status=status.HTTP_200_OK)
             except IntegrityError:
-                print("here1")
                 return Response({'error' : '중복된 팀이름입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            print("here2")
             return Response({'error' : '입력 형식을 확인해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
 
     def get_serializer_class(self):
@@ -102,7 +94,6 @@ class InvitationAPI(generics.GenericAPIView): # 새로운 유저를 팀으로 �
         #request.user는 로그인 헀을 때 해당 사용자를 리턴한다.
         serializer=self.serializer_class(data=request.data)
         User=get_user_model()
-        print("request data : ", request.data)
         if serializer.is_valid():
             try:
                 team=get_object_or_404(Team, _id=teamID)
@@ -221,10 +212,8 @@ class UserSearchAPI(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request, team_pk, name):
-        print("here, pk : ", team_pk, "name : ", name, get_user_model())
         queryset=get_user_model().objects.filter(nickname__contains=name, is_mail_authenticated=True).filter(~Q(pk=request.user.pk)).filter(~Q(teamList=team_pk))
 
-        print("queryset : ", queryset)
         return Response(self.serializer_class(queryset, many=True).data, status=status.HTTP_200_OK)
 
 

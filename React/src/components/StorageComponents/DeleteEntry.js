@@ -8,7 +8,6 @@ const DeleteEntry=(notify, errorCheck, loadFilesNFolders, curFolderID, fileID, c
       data['file' + String(Number(id)+1)] = idSplit[id];
     }
     
-    console.log("data : ", data)
     axios.delete(`${window.location.origin}/api/multi-entry`, {
       data: data,
       headers: {

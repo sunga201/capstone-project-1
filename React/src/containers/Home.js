@@ -50,18 +50,15 @@ export default class Home extends Component {
     isShowingSearchBar: true,
   };
   this.maxSpace=5; //기가바이트 단위
-  console.log("in home, props : ", this.props);
   this.toggleSidebar=this.toggleSidebar.bind(this);
   this.toggle=this.toggle.bind(this);
 }
 
   componentDidMount() {
-    console.log("home.js start, props : ", this. props);
     this.checkUserState();
   }
 
   checkUserState=()=> {
-    console.log("check User state !!!!");
     let getSpace=(size)=>{
       return Math.round(100*(this.maxSpace-size/Math.pow(1000, 3)))/100; 
       //사용자별로 남은 공간 구하기
@@ -83,21 +80,16 @@ export default class Home extends Component {
         state.percent=getPercent(content['data']['root_info']['file_size_total']);
         return state;
       });
-
-    console.log(JSON.stringify(this.state.invitationList));
-    console.log("invitationList: "+JSON.stringify(this.state.invitationList));
     })
     .then(()=>{
       let nameArr=[], leaderArr=[], leaderNickArr=[];
       for(let team in this.state.invitationList){
         let teamID=this.state.invitationList[team]
-        console.log("in loop, team : ", teamID);
         axios.get(`${window.location.origin}/api/team-management/${teamID}`, this.state.option)
         .catch(error=>{
           this.props.errorCheck(error.response);
         }) 
         .then(content => {
-          console.log('Name team, content : ', content);
           nameArr.push(content['data']['team_name']);
           leaderArr.push(content['data']['team_leader']);
           leaderNickArr.push(content['data']['team_leader_nickname']);
@@ -108,8 +100,6 @@ export default class Home extends Component {
         leaderList: leaderArr,
         leaderNickList: leaderNickArr
       });
-      console.log("result : ", JSON.stringify(this.state.invitationNameList));
-      console.log("invitationList: "+JSON.stringify(this.state.invitationList));
     })
     .catch(e=>this.props.notify(e))
     
@@ -131,7 +121,6 @@ export default class Home extends Component {
   }
 
   changeSearchKeyword=(e)=>{
-    console.log('target : ', e.target, e.target.id, e.target.value);
     this.setState({
       searchKeyword: e.target.value
 
@@ -153,7 +142,6 @@ export default class Home extends Component {
       this.props.notify('검색어는 두 글자 이상으로 입력해주세요.');
       return;
     }
-    console.log("submit! ID : ", this.state.searchRootDirID);
     let url=`${window.location.origin}/api/search/${this.state.searchRootDirID}/${this.state.searchKeyword}`;
     this.toggleIsSearching();
 
@@ -169,7 +157,6 @@ export default class Home extends Component {
     .then(content=>{
         content=content.data;
         if(content.hasOwnProperty('error')) throw Error(content['error']);
-        console.log('homeContent start content : ', content);
         this.setState(state=>{
           state.searchFileList=content['files'];
           state.searchFolderList=content['subdirectories'];
@@ -186,7 +173,6 @@ export default class Home extends Component {
   }
 
   switchSearchingRoot=(rootDirID, rootDirName='')=>{
-    console.log("switch! ID : ", rootDirID);
     this.setState({
       searchRootDirID: rootDirID,
       searchRootDirName: rootDirName
@@ -202,8 +188,6 @@ export default class Home extends Component {
 
 
   render() {
-
-    console.log(`${this.props.match.path}team`)
     return (
       <div className="Home">
 

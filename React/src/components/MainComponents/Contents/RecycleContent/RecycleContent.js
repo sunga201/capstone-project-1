@@ -21,15 +21,10 @@ const RecycleContent=(props)=>{
     const [isLoading, setIsLoading] = useState(false);
       
 
-    useEffect(() => {
-      console.log("propggjweoigwes rootDirID : ", props.rootDirID)
-      },[])
-
     const loadRecycleItems=()=>{
         setIsLoading(true);
         axios.get(`${window.location.origin}/api/recycle`,option)
             .then(content2 => {
-              console.log("content2 : ", content2.data.files)
               const newFileList=[], newFolderList=[];
               const fileNameList= Object.keys(content2.data.files)
               for(let i=0;i<fileNameList.length;i++) {
@@ -48,10 +43,8 @@ const RecycleContent=(props)=>{
                   newFileList.push(fileInfo);
                 }
               }
-              console.log("new file list : ", newFileList);
               setFileList(newFileList);
   
-              console.log('content2 : ', content2.data.directories)
               const folderNameList= Object.keys(content2.data.directories) // root 하위 폴더불러오기->어차피 root폴더 접근해야해서 파일불러오기와 병행
               for(let i=0;i<folderNameList.length;i++){
                 let len=content2.data.directories[folderNameList[i]].length;

@@ -15,7 +15,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const MyContextMenu = (props) => {
-    console.log("context menu props : ", props);
     const handleClick = () => {
       return ("");
     }

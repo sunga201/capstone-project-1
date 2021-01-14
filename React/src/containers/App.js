@@ -24,7 +24,6 @@ import ReturnToLogin from "./ReturnToLogin";
 class App extends Component {
   constructor(props) {
     super(props); //App 컴포넌트가 상속받은 Component가 지니고 있던 생성자를 super를 통해 미리 실행한다.
-    console.log('App prop test.');
     this.state = { //컴포넌트의 state 정의
       username: "",
       nickname: "",
@@ -34,7 +33,6 @@ class App extends Component {
       isLoading: false,
       rootDirID: "",
     };
-    console.log('is localhost ? : ', window.location.origin);
   }
 
   toggleLoadingState=()=>{ //현재 서버와 통신 중이라면 isLoading을 true로, 아니면 false로 바꿔준다. 버튼 스피너를 위해 필요함.
@@ -49,9 +47,7 @@ class App extends Component {
   }
 
   getUserInfo=()=>{
-    console.log("check start.");
     let errorCheck = response => {
-      console.log("user check, here!!!!, response : ", response);
       if(!response.hasOwnProperty('error')&&!response.hasOwnProperty('detail')){
         this.setState({
           isLogin: true,
@@ -71,6 +67,7 @@ class App extends Component {
 
     let jwtErrorCheck = response => {
        if(!response.ok){
+          console.log("JWT 토큰 만료.");
           this.deleteJWTToken();
           Promise.reject(); //서버에서 jwt 토큰 유효시간 줄여서 테스트해보기
        }
@@ -87,8 +84,8 @@ class App extends Component {
     .then(res=>res.json())
     .then(errorCheck)
     .then(content=>{
-      console.log("login? : ", this.state.isLogin);
       if(this.state.isLogin){ // 사용자가 로그인 중일 때
+        console.log("재발급!");
         fetch(`${window.location.origin}/api/jwt-refresh`, { //JWT 토큰 재발급
             method: "POST", 
             headers: {
@@ -98,19 +95,13 @@ class App extends Component {
         })
         .then(jwtErrorCheck)
         .then(res=>res.json())
-        .then(content=>{
-            console.log("토큰이 재발급되었습니다.");
-            console.log(content);
-            console.log(this.state);
-        }).catch(error=>console.log('JWT 토큰 재발급 에러!'));
+        .catch(error=>console.log('JWT 토큰 재발급 에러!'));
       }
-      console.log("content return!, content : ", content);
       return content;
     }).catch(error=>console.log('로그인 체크 에러!'));
   }
 
   userStateChange = (authenticated, mailAuthenticated, username="", nickname="", email="", root_dir="") => {
-    console.log("thisStateTest.", this.state);
     if(email=='google'||email=='facebook'){ //소셜 로그인
       this.setState({
         isLogin: authenticated,
@@ -134,7 +125,6 @@ class App extends Component {
   }
 
   async deleteJWTToken(){
-    console.log('JWT 토큰 제거중.');
     let isTokenStored=true;
     let tokenCheck = response => {
       if(!response.ok){
@@ -151,19 +141,13 @@ class App extends Component {
         credentials: 'include',
       })
       .then(tokenCheck)
-      .then(data => {
-        console.log('True Log out.', this.state);
-      })
       .catch(()=>{
-        console.log("error!");
         this.userStateChange(false, false);
-        console.log('Log out.');
       })
   }
 
   // 로그아웃시 서버로 요청 보내서 JWT 토큰이 저장된 httponly 쿠키 제거
   logout = () => {
-    console.log("logout called!");
     this.userStateChange(false, false);
     window.FB.logout();
     let auth2 = window.gapi && window.gapi.auth2.getAuthInstance();
@@ -187,7 +171,6 @@ class App extends Component {
   };
 
   showRemainingTime=(flow)=>{
-    console.log('remaining time!!! : ', flow);
     let msg='';
     if(flow.files.length==1){
       msg=flow.files[0].name + ' 다운로드중...';
@@ -199,7 +182,6 @@ class App extends Component {
   }
 
   errorCheck=(response, message="서버 에러 발생!")=>{
-    console.log("error response : ", response);
     if(response.status==401){
       this.userStateChange(false, false);
       this.props.history.push('/login');

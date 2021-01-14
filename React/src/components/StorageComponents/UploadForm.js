@@ -6,7 +6,6 @@ import {Checkmark} from 'react-checkmark'
 // gets props by destructuring the props object
 // note that the input fields use the props to render their value attribute
 const UploadForm = ({myRef, isSubmitted, fileList, resume, stop, remove}) => {
-  console.log("UploadTestForm start, myRef : ", myRef)
   return(
     <div className="upload-screen">
         {!isSubmitted && 

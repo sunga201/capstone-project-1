@@ -19,7 +19,6 @@ export default class ProfileCotnent extends Component{
             withdrawalModal: false,
             isConfirmLoading: false,
         }
-        console.log("profile, props : ", this.props, this.props.username.includes('_'));
     }
 
     valChangeControl=(e)=>{
@@ -28,11 +27,9 @@ export default class ProfileCotnent extends Component{
         this.setState({
           [target_id]: target_val
         });
-        console.log(target_id, ' : ', target_val);
     }
 
     onEnterPressed=(target)=>{
-        console.log("target : ", target);
         if(target.charCode==13){
             if(this.state.withdrawalModal)
                 this.processWithdrawal();
@@ -42,7 +39,6 @@ export default class ProfileCotnent extends Component{
     }
 
     checkConfirmValue=()=>{
-        console.log('check confirm value.');
         let message="", url="", data={};
 
         const option = {
@@ -79,10 +75,8 @@ export default class ProfileCotnent extends Component{
             }
         })
         .then(()=>{
-            console.log("here!");
             this.props.getUserInfo()
             .then(content=>{
-                console.log("content : ", content);
                 this.setState({
                     username: content.username,
                     nickname: content.nickname,
@@ -126,7 +120,6 @@ export default class ProfileCotnent extends Component{
         })
         .then(response=>{
             response=response.data;
-            console.log('response : ', response);
             if(response.hasOwnProperty('error')) throw Error(response['error']);
             this.props.notify("변경이 완료되었습니다.");
             this.props.checkUserState();
@@ -160,7 +153,6 @@ export default class ProfileCotnent extends Component{
     }
 
     toggle=()=>{
-        console.log("toggle click!");
         this.setState(state=>{
             state.withdrawalModal=!state.withdrawalModal;
             return state;
@@ -181,7 +173,6 @@ export default class ProfileCotnent extends Component{
             })
             .then(content=>{
                 content=content.data;
-                console.log("withdrawal content : ", content);
                 this.props.notify("회원 탈퇴가 완료되었습니다.");
                 this.props.userStateChange(false, false);
                 this.props.history.push('/login');

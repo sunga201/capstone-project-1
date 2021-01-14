@@ -26,9 +26,7 @@ const Item = (props) => {
   const { selectableRef, isSelected, isSelecting } = props;
   useEffect(
     () => {
-      console.log("in item, props : ", props)
       if (isSelected){
-        console.log('rename : ', isRename);
         showFileInfo(index);
       }
     },

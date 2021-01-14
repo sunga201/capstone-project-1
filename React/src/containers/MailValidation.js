@@ -15,7 +15,6 @@ class MailValidation extends Component{
     }
 
     componentDidMount(){
-        console.log(document.location.href.split("mail-validation/"));
         let url=`${window.location.origin}/api/activate/${document.location.href.split("mail-validation/")[1]}`;
         let isErr=false;
      
@@ -42,9 +41,6 @@ class MailValidation extends Component{
                 this.setState({
                     guideText: "메일 인증이 완료되었습니다. Moonge drive의 기능을 즐겨보세요!",
                 });
-                console.log(this.state);
-                console.log('메일 인증 완료.', this.state.guideText);
-                console.log(this.state);
                 this.props.userStateChange(true,
                                            true,
                                            content.username, 
@@ -57,8 +53,6 @@ class MailValidation extends Component{
     }
 
     toHome(){
-        console.log("toHome.");
-        console.log(this);
         this.props.history.push('/');
     }
 

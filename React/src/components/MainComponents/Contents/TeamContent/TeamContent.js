@@ -114,7 +114,6 @@ const TeamContent = (props) => {
       team_name: myTeamName,
       team_leader: username,
     };
-    console.log("team name data : ", TeamNameData);
     const body = JSON.stringify(TeamNameData);
     const option = {
       headers: {
@@ -151,7 +150,6 @@ const TeamContent = (props) => {
   const friendSearch = (name) => {
     if(name=='') return;
     if(typeof(name)=='object') name=friendName;
-    console.log("search name : ", name);
     axios.get(`${window.location.origin}/api/search-user/${currentTeamId}/${name}`,option) //검색버튼 안눌러도 즉각적으로 결과보여주기
     .then(content => { 
       setFriendList(content.data);
@@ -166,7 +164,6 @@ const TeamContent = (props) => {
   
   //팀 초대
   const teamInvite = () => {
-    console.log("here!, frendChecked : ", friendChecked);
     for (let i = 0; i < friendChecked[0].length; i++) {
       const option = {
         headers: {
@@ -178,7 +175,6 @@ const TeamContent = (props) => {
       const userName = {
         username: friendList[friendChecked[0][i]]["username"],
       };
-      console.log('invite check, ', friendList, friendList[friendChecked[0][i]]["username"]);
       const body = JSON.stringify(userName);
       axios.put(
           `${window.location.origin}/api/team/${currentTeamId}/invitation`,
@@ -186,12 +182,10 @@ const TeamContent = (props) => {
           option
         )
         .catch(error=>{
-          console.log("error : ", error.response.status);
           props.errorCheck(error.response, error.response.data['error']);
           if(error.response.status>=400) throw Error(error.response.data['error']);
         }) 
         .then((content) => {
-          console.log("invitation : " + JSON.stringify(content));
           if (content.hasOwnProperty("error")) {
             props.notify("error");
           } else {
@@ -215,10 +209,8 @@ const TeamContent = (props) => {
 
   //선택한 유저 저장
   const friendOnCheck = (value) => {
-    console.log('select val : ', value, ', friend check list : ', friendChecked);
     friendChecked.pop();
     friendChecked.push(value);
-    console.log(friendChecked[0]);
   };
 
 
@@ -233,7 +225,6 @@ const TeamContent = (props) => {
       }) 
       .then((content) => {
         let nameArr=[], nickArr=[], idArr=[];
-        console.log(content['data'])
         setTeamLeader(content["data"]["team_leader"]);
         setTeamLeaderNick(content['data']['team_leader_nickname']);
         for(let idx in content['data']['member_list']){
@@ -273,7 +264,6 @@ const TeamContent = (props) => {
         return error.response;
       }) 
       .then((content) => {
-        console.log("content : ", content);
         if(content.status>=400){
           setMyTeamName('');
           throw Error(content.data['error']);
@@ -295,7 +285,6 @@ const TeamContent = (props) => {
       withCredentials: true,
       credentials: "include",
     };
-    console.log("현재 팀 id : " + currentTeamId);
     axios.put(`${window.location.origin}/api/team/${currentTeamId}/secession`, null, option)
     .catch(error=>{
       props.errorCheck(error.response);

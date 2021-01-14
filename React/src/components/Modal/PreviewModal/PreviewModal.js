@@ -18,9 +18,7 @@ import {
   } from "reactstrap";
 
 const PreviewModal=({isOpen, toggle, fileName, fileID, hasThumbnail, isVideo, notify, loadFilesNFolders})=>{
-    console.log("preview props : ", isOpen, toggle, fileName, fileID, hasThumbnail, isVideo);
     let url=`${window.location.origin}/api/preview/${fileID}`;
-    //let url='/images/photo-1589011352120-510c9fca6d31.png';
 
     const download=()=>{
         CustomDownload(fileName, fileID, notify, loadFilesNFolders);

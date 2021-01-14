@@ -154,7 +154,6 @@ export default class Signup extends Component {
     })
     .then(content => {
       content=content.data;
-      console.log("content : ", content);
 
       if (content.user.username) {
         this.props.userStateChange(true,

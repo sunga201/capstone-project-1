@@ -16,13 +16,9 @@ import { Input,
 const ProfileContentForm=({username, nickname, email, phone_num, social, newPassword, value, valChange, onEnterPressed,
                            isValueConfirmed, isSocialAccount, checkConfirmValue, changeNickname, changePhoneNum, isConfirmLoading, 
                            changePassword, returnToHome, withdrawalModal, withdrawalText, processWithdrawal, toggle})=>{
-    console.log("social : ", social, typeof(social)); 
 
     //value의 값은 일반 계정의 경우 password, 소셜 계정의 경우 email
     let target=isSocialAccount ? 'email' : 'password';
-    /*console.log("value : ", value, ' valChange : ', valChange, 'isValueConfirmed : ', isValueConfirmed,
-                'isSocialAccount : ', isSocialAccount, ', checkConfirmValue : ', checkConfirmValue);*/
-
     return(
         <Fragment>
             {/*회원 탈퇴 modal*/}

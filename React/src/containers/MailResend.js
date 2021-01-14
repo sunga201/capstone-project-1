@@ -6,8 +6,6 @@ import axios from 'axios';
 class MailResend extends Component{
     constructor(props){
         super(props);
-        console.log('this test.');
-        console.log(this);
         this.state = {
             username: this.props.username,
             nickname: this.props.nickname,
@@ -15,13 +13,10 @@ class MailResend extends Component{
             email : this.props.useremail,
         };
         this.resendAuthEmail=this.resendAuthEmail.bind(this);
-        console.log(this.state);
     }
     
     async resendAuthEmail(e){
         e.preventDefault();
-        console.log('클릭!');
-        console.log(this.state);
         this.props.toggleLoadingState();
 
         const option = {
@@ -35,8 +30,6 @@ class MailResend extends Component{
         .then(this.props.errorCheck)
         .then(content=>{
             content=content.data;
-            console.log(content);
-            console.log("메일 재발송 완료.");
             this.props.toggleLoadingState();
         })
         .catch(e=>{
@@ -45,9 +38,7 @@ class MailResend extends Component{
         });
     }
 
-    render(){
-        console.log("mail auth render test.", this.state);
-        
+    render(){     
         return(
             <div>
             { this.state && this.state.username!="" && this.state.email!=""&&

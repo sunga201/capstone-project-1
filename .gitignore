@@ -28,3 +28,6 @@ stunnel.*
 
 # Amazon EC2 접속용 키파일
 *.pem
+
+#test file
+app/static/Account/test/*
