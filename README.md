@@ -50,18 +50,22 @@ https://moongedrive.xyz 로 접속해주세요.
 
 사용한 기술
 -------------
-1. flow.js (https://github.com/flowjs/flow.js) : 파일 업로드 도중 일시정지나 취소, 재개를 구현하기 위해 사용한 front-end 라이브러리입니다. 파일을 chunk 단위로 잘라 전송하므로
-                                                  파일 업로드 시 서버의 메모리 부하를 줄여줄 수 있습니다. 
-                                                  
-2. streamsaver.js (https://github.com/jimmywarting/StreamSaver.js) : 파일 다운로드를 구현하기 위해 사용한 front-end 라이브러리입니다. 대용량 파일을 다운로드 받을 때 사용자의
-                                                                      메모리를 거쳤다가 디스크에 저장되는데, 이 과정에서 사용자의 메모리 부족으로 인해 다운로드가 제대로 수행되지
-                                                                      않는 현상을 해결하기 위해 사용했습니다. WriteableStream을 이용하여 사용자의 메모리를 거치지 않고 사용자의
-                                                                      파일시스템에 직접적으로 파일을 다운로드 받을 수 있게 해줍니다.
-                                                                      
-3. mod_zip (https://github.com/evanmiller/mod_zip) : 여러 개의 파일을 다운로드 받을 때, 웹 어플리케이션 서버의 부하를 줄여주기 위해 Nginx에서 대신 압축해서 사용자에게 전송해주는
-                                                     기능을 구현하기 위해 사용했습니다. 실제 적용은 nginx와 mod-zip이 적용되어 있는 docker 이미지를 다운로드 받아 사용했습니다.
-                                                     (levelonestl/nginx-mod-zip : https://hub.docker.com/r/levelonestl/nginx-mod-zip)
-                                                     
+> flow.js (https://github.com/flowjs/flow.js)
+
+  파일 업로드 도중 일시정지나 취소, 재개를 구현하기 위해 사용한 front-end 라이브러리입니다. 파일을 chunk 단위로 잘라 전송하므로 파일 업로드 시 서버의 메모리 부하를 줄여줄 수 있습니다. 
+      <br></br>
+      
+> streamsaver.js (https://github.com/jimmywarting/StreamSaver.js)
+
+  파일 다운로드를 구현하기 위해 사용한 front-end 라이브러리입니다. 대용량 파일을 다운로드 받을 때 사용자의 메모리를 거쳤다가 디스크에 저장되는데, 이 과정에서 사용자의 메모리 부족으로 인해 다운로드가 제대로 수행되지 않는 현상을 해결하기 위해 사용했습니다. WriteableStream을 이용하여 사용자의 메모리를 거치지 않고 사용자의 파일시스템에 직접적으로 파일을 다운로드 받을 수 있게 해줍니다.
+     <br></br>
+
+> mod_zip (https://github.com/evanmiller/mod_zip) 
+
+  여러 개의 파일을 다운로드 받을 때, 웹 어플리케이션 서버의 부하를 줄여주기 위해 Nginx에서 대신 압축해서 사용자에게 전송해주는 기능을 수행합니다. 실제 적용은 nginx와 mod-zip이 적용되어 있는 docker 
+  이미지를 다운로드 받아 사용했습니다. (levelonestl/nginx-mod-zip : https://hub.docker.com/r/levelonestl/nginx-mod-zip)
+
+                                                      
 사용 예시
 -------------
 <details>
