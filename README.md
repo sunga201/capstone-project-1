@@ -49,8 +49,8 @@ https://moongedrive.xyz 로 접속해주세요.
 > Others
   > * Docker
   > * AWS
-
-사용한 기술
+  
+참고한 라이브러리
 -------------
 > flow.js (https://github.com/flowjs/flow.js)
 
