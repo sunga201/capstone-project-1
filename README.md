@@ -7,6 +7,12 @@
 <img src="img/readme/메인 2.png" height="500px" alt="main"></img><br/>      
 </br></br></br>
 
+</br></br>
+팀웜
+--------------
+홍성현 외 3인
+
+</br></br>
 사용 방법
 ----------
 https://moongedrive.xyz 로 접속해주세요.
