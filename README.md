@@ -5,12 +5,13 @@
 #### 웹 브라우저를 통해 누구나 간편하게 사용할 수 있는 웹 클라우드 저장소입니다. 
 <img src="img/readme/메인.png" height="500px" alt="login"></img><br/>
 <img src="img/readme/메인 2.png" height="500px" alt="main"></img><br/>      
-
+</br></br></br>
 
 사용 방법
 ----------
 https://moongedrive.xyz 로 접속해주세요.
 
+</br></br>
 지원 기능
 ----------
 * 5GB의 private storage
@@ -29,7 +30,7 @@ https://moongedrive.xyz 로 접속해주세요.
 
 * 프로필 수정 및 회원 탈퇴 기능
 
-
+</br></br>
 사용 기술 스택 / 프레임워크
 --------------
 > Front-end
@@ -49,7 +50,18 @@ https://moongedrive.xyz 로 접속해주세요.
 > Others
   > * Docker
   > * AWS
-  
+
+</br></br>
+담당 업무
+-------------
+> * JWT 토큰과 OAuth2를 이용한 로그인 인증 API 구현
+> * 회원가입, 프로필 수정 등 사용자 정보 관리 API 구현
+> * Python EmailMessage 패키지를 이용한 메일 인증 구현
+> * 팀 생성 및 사용자 초대, 팀 정보 수정 등 팀 관리 API 구현
+> * Nginx의 mod-zip과 http X-Accel-Redirect header를 이용한 파일 다운로드 API 구현
+> * Front-end 업무 보조
+
+</br></br>  
 참고한 라이브러리
 -------------
 > flow.js (https://github.com/flowjs/flow.js)
@@ -67,7 +79,7 @@ https://moongedrive.xyz 로 접속해주세요.
   여러 개의 파일들을 동시에 다운로드 받을 때 파일들을 압축해서 사용자에게 제공해주는 Nginx의 라이브러리입니다. Nginx가 파일들의 압축을 대신 수행하여 WAS의 부하를 줄여주는 역할을 합니다. DRF에서 사용
   하기 위해 python 라이브러리인 django-zip-stream과 함께 사용했습니다.(https://github.com/travcunn/django-zip-stream)
 
-                                                      
+</br></br>                                                      
 사용 예시
 -------------
 <details>
