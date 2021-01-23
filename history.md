@@ -534,7 +534,7 @@ API
 | /send-auth-email | 인증 메일 보내기 |-|-|-|
 | /jwt-refresh | JWT 토큰 재발급|-|-|-|
 | /jwt-verify | JWT 토큰 유효성 확인 |-|-|-|
-| /active/<str:uidb64>/<str:token> |-| 인증메일에 사용하는 URL |-|-|
+| /mail-validation/<str:uidb64>/<str:token> |-| 인증메일에 사용하는 URL |-|-|
 | /check-password|사용자 비밀번호 확인|-|-|-|
 | /check-email|사용자 이메일 확인|-|-|-|
 
@@ -557,7 +557,7 @@ API
 
 * POST /api/logout을 통해 로그아웃을 수행할 수 있으며, 클라이언트 브라우저에서 JWT 토큰이 저장된 쿠키를 삭제합니다.
    
-* /active/<str:uidb64>/<str:token>은 인증메일용 URL로, 이메일 인증에만 사용됩니다.
+* /mail-validation/<str:uidb64>/<str:token>은 인증메일용 URL로, 이메일 인증에만 사용됩니다.
 
 * /check-password 및 /check-email은 프로필 확인을 위해 비밀번호나 이메일을 확인할 때 사용합니다. 비밀번호는 사이트 계정용, 이메일 주소는 소셜   계정 용입니다. 각각 password, email 필드에 값을 넣고 POST 요청을 보내면 됩니다.
 
