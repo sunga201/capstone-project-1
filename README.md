@@ -115,4 +115,4 @@ https://moongedrive.xyz 로 접속해주세요.
 </div>
 </details>
 
-업데이트 내역은 history.md 파일에서 확인하실 수 있으며, 작업 커밋 내역은 https://github.com/milesand/capstone-project 에서 확인하실 수 있습니다.
+업데이트 내역은 history.md 파일에서 확인하실 수 있습니다.
